@@ -21,20 +21,9 @@ PATCH_VBMETA_FLAG=auto;
 . tools/ak3-core.sh;
 
 ## AnyKernel boot install
-ui_print "[#] Installing Kernel...";
+ui_print "[#] Flashing Kernel...";
 dump_boot;
-write_boot;
+flash_boot;
 
-# The generated DTB and recovery ramdisk compatibility overlay live in
-# vendor_boot on lisa, so switch partitions and repack that image after
-# boot/dtbo are done.
-BLOCK=vendor_boot;
-reset_ak;
-
-ui_print "[#] Installing dtb and recovery ramdisk compatibility...";
-dump_boot;
-write_boot;
-
-ui_print "[+] Kernel flash successful!";
-ui_print "[+] Arigato for using Sashimi Kernel!! :3";
-## end boot install
+ui_print "{=} Kernel flashed successfully!";
+ui_print "{=} Arigato for using Sashimi!! :3";l
