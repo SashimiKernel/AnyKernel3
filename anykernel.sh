@@ -23,7 +23,18 @@ PATCH_VBMETA_FLAG=auto;
 ## AnyKernel boot install
 ui_print "[#] Installing Kernel...";
 dump_boot;
-flash_boot;
+write_boot;
 
-ui_print "[+] Kernel successfully flashed!";
-ui_print "[+] Arigato for using Sashimi! :3";
+# The generated DTB and recovery ramdisk compatibility overlay live in
+# vendor_boot on lisa, so switch partitions and repack that image after
+# boot/dtbo are done.
+BLOCK=vendor_boot;
+reset_ak;
+
+ui_print "[#] Installing dtb and recovery ramdisk compatibility...";
+dump_boot;
+write_boot;
+
+ui_print "[+] Kernel flash successful!";
+ui_print "[+] Arigato for using Sashimi Kernel!! :3";
+## end boot install
