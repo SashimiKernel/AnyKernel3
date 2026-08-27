@@ -25,5 +25,5 @@ ui_print "[#] Flashing Kernel...";
 dump_boot;
 flash_boot;
 
-ui_print "{=} Kernel flashed successfully!";
-ui_print "{=} Arigato for using Sashimi!! :3";l
+ui_print "[=] Kernel flashed successfully!";
+ui_print "[=] Arigato for using Sashimi!! :3";
