@@ -1,7 +1,7 @@
 ### AnyKernel3 Ramdisk Mod Script
 
 properties() { '
-kernel.string=Sashimi
+kernel.string=Sashimi-Kernel
 do.devicecheck=1
 do.modules=0
 do.systemless=0
