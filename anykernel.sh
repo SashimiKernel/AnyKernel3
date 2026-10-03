@@ -76,6 +76,7 @@ if [ -d "vendor_ramdisk/lib/modules" ]; then
 fi;
 
 write_boot;
+## end vendor_boot install
+
 ui_print "[=] Kernel flashed successfully!";
 ui_print "[=] Arigato for using Sashimi!! :3";
-## end vendor_boot install
