@@ -320,6 +320,12 @@ int2ver() {
   fi;
 }
 do_versioncheck() {
+  if [ -f tools/sashimi-common.sh ]; then
+    . tools/sashimi-common.sh;
+    ui_print "Checking Android version...";
+    check_android_base || exit 1;
+    return 0;
+  fi;
   [ "$(file_getprop anykernel.sh supported.versions)" ] || return 1;
   local android_ver hi_ver lo_ver parsed_ver supported supported_ver;
   ui_print "Checking Android version...";

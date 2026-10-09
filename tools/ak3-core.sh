@@ -244,7 +244,7 @@ repack_ramdisk() {
 }
 
 # flash_boot (build, sign and write image only)
-flash_boot() {
+prepare_boot() {
   local varlist i kernel ramdisk fdt cmdline comp part0 part1 nocompflag signfail pk8 cert avbtype;
 
   cd $SPLITIMG;
@@ -461,6 +461,15 @@ flash_boot() {
   elif [ "$(wc -c < boot-new.img)" -gt "$(wc -c < boot.img)" ]; then
     abort "New image larger than target partition. Aborting...";
   fi;
+  BOOT_PREPARED_FOR=$BLOCK;
+}
+
+flash_boot() {
+  cd $AKHOME;
+  if [ "$BOOT_PREPARED_FOR" != "$BLOCK" -o ! -s boot-new.img ]; then
+    prepare_boot;
+  fi;
+  unset BOOT_PREPARED_FOR;
   blockdev --setrw $BLOCK 2>/dev/null;
   if [ -f "$BIN/flash_erase" -a -f "$BIN/nandwrite" ]; then
     flash_erase $BLOCK 0 0;
@@ -490,7 +499,7 @@ flash_generic() {
 
   if [ "$img" -a ! -f ${1}_flashed ]; then
     for path in /dev/block/mapper /dev/block/by-name /dev/block/bootdevice/by-name; do
-      for file in $1 $1$SLOT; do
+      for file in $1$SLOT $1; do
         if [ -e $path/$file ]; then
           imgblock=$path/$file;
           break 2;
@@ -802,6 +811,7 @@ patch_ueventd() {
 # reset_ak [keep]
 reset_ak() {
   local current i;
+  unset BOOT_PREPARED_FOR;
 
   # Backwards compatibility for old API
   [ "$no_block_display" ] && NO_BLOCK_DISPLAY="$no_block_display";
