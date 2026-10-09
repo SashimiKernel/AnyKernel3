@@ -121,8 +121,11 @@ if [ "$PATCH_VENDOR" = 1 ]; then
 fi;
 
 if [ "$DTBO_TARGET" ]; then
+  ui_print " " "$DTBO_TARGET";
   blockdev --setrw "$DTBO_TARGET" 2>/dev/null || abort "Cannot enable DTBO writes.";
   dd if="$AKHOME/dtbo.img" of="$DTBO_TARGET" bs=1048576 conv=fsync || abort "Flashing DTBO failed.";
+else
+  ui_print " " "DTBO image not included; keeping current DTBO.";
 fi;
 sync;
 rm -rf "$STAGING";

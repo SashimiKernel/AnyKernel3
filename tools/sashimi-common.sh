@@ -37,3 +37,20 @@ check_android_base() {
   abort "Unsupported or unidentified Android 16 base. QPR1 or newer is required.";
   return 1;
 }
+
+android_version_label() {
+  local version build_id;
+  version=$(system_prop ro.system.build.version.release ro.build.version.release);
+  case "$version" in
+    17|17.*) printf '17\n';;
+    16|16.*)
+      build_id=$(system_prop ro.system.build.id ro.build.id);
+      case "$build_id" in
+        BP3A.*) printf '16 QPR1\n';;
+        BP4A.*) printf '16 QPR2\n';;
+        *) printf '16\n';;
+      esac;
+    ;;
+    *) printf '%s\n' "${version:-Unknown}";;
+  esac;
+}

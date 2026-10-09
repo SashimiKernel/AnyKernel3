@@ -322,13 +322,17 @@ int2ver() {
 do_versioncheck() {
   if [ -f tools/sashimi-common.sh ]; then
     . tools/sashimi-common.sh;
-    ui_print "Checking Android version...";
+    local android_ver;
+    ui_print "Checking Android Version...";
+    android_ver=$(android_version_label);
+    ui_print "$android_ver";
     check_android_base || exit 1;
+    ui_print " ";
     return 0;
   fi;
   [ "$(file_getprop anykernel.sh supported.versions)" ] || return 1;
   local android_ver hi_ver lo_ver parsed_ver supported supported_ver;
-  ui_print "Checking Android version...";
+  ui_print "Checking Android Version...";
   supported_ver=$(file_getprop anykernel.sh supported.versions | tr -d '[:space:]');
   android_ver=$(file_getprop /system/build.prop ro.build.version.release);
   parsed_ver=$(int2ver $android_ver);
@@ -577,7 +581,6 @@ do_versioncheck;
 do_levelcheck;
 do_vendorlevelcheck;
 
-ui_print "Installing...";
 # hack to maintain support for anykernel.sh files that weren't updated correctly along with the AK core
 CORE=$(grep -oE 'ak.*core.sh' anykernel.sh);
 [ -f tools/$CORE ] || ln -s $AKHOME/tools/ak*-core.sh $AKHOME/tools/$CORE;
