@@ -557,6 +557,9 @@ if [ $? != 0 -o -z "$(ls bin)" ]; then
 fi;
 OLD_PATH="$PATH";
 export PATH="$AKHOME/tools:$AKHOME/bin:$PATH";
+if [ -f SHA256SUMS ]; then
+  sha256sum -c SHA256SUMS || abort "Package checksum verification failed.";
+fi;
 
 if [ -f banner ]; then
   ui_printfile banner;

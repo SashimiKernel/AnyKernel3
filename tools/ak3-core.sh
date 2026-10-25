@@ -470,19 +470,8 @@ flash_boot() {
     prepare_boot;
   fi;
   unset BOOT_PREPARED_FOR;
-  blockdev --setrw $BLOCK 2>/dev/null;
-  if [ -f "$BIN/flash_erase" -a -f "$BIN/nandwrite" ]; then
-    flash_erase $BLOCK 0 0;
-    nandwrite -p $BLOCK boot-new.img;
-  elif [ "$CUSTOMDD" ]; then
-    dd if=/dev/zero of=$BLOCK $CUSTOMDD 2>/dev/null;
-    dd if=boot-new.img of=$BLOCK $CUSTOMDD;
-  else
-    cat boot-new.img /dev/zero > $BLOCK 2>/dev/null || true;
-  fi;
-  if [ $? != 0 ]; then
-    abort "Flashing image failed. Aborting...";
-  fi;
+  command -v sashimi_flash_image >/dev/null 2>&1 || abort "Flash helper is missing.";
+  sashimi_flash_image "$AKHOME/boot-new.img" "$BLOCK" pad || abort "Flashing or verifying image failed.";
 }
 
 # flash_generic <name>

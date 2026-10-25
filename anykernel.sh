@@ -31,6 +31,7 @@ PATCH_VENDOR=0;
 # import functions/variables and setup patching - see for reference (DO NOT REMOVE)
 . tools/ak3-core.sh;
 . "$AKHOME/tools/sashimi-common.sh";
+. "$AKHOME/tools/sashimi-flash.sh";
 check_android_base || exit 1;
 
 case "$SLOT" in
@@ -122,8 +123,7 @@ fi;
 
 if [ "$DTBO_TARGET" ]; then
   ui_print " " "$DTBO_TARGET";
-  blockdev --setrw "$DTBO_TARGET" 2>/dev/null || abort "Cannot enable DTBO writes.";
-  dd if="$AKHOME/dtbo.img" of="$DTBO_TARGET" bs=1048576 conv=fsync || abort "Flashing DTBO failed.";
+  sashimi_flash_image "$AKHOME/dtbo.img" "$DTBO_TARGET" raw || abort "Flashing or verifying DTBO failed.";
 else
   ui_print " " "DTBO image not included; keeping current DTBO.";
 fi;
